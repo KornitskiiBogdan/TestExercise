@@ -16,6 +16,8 @@
         <TextBox Name="sumBox" Grid.Row="1" MinWidth="250" Background="AliceBlue" PreviewTextInput="sumBox_TextInput" PreviewKeyDown="sumBox_KeyDown"/>
 
         <WrapPanel Grid.Row="2" HorizontalAlignment="Right" Margin="0,15,0,0">
+            <RadioButton x:Name="smallRadioButton" Content="Мелкие" Margin="0,0,10,0"/>
+            <RadioButton x:Name="largeRadioButton" Content="Крупные" Margin="0,0,10,0"/>
             <Button IsDefault="True" Click="OK_Click" MinWidth="60" Margin="0,0,10,0" Content="OK"/>
             <Button IsCancel="True" MinWidth="60" Content="Отмена"/>
         </WrapPanel>

@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace TestExercise
 {
@@ -29,18 +20,31 @@ namespace TestExercise
         {
             if(int.TryParse(sumBox.Text, out int result) && result % 10 == 0)
             {
-                foreach(var b in _viewModel.Banknotes.Reverse())
+                HashSet<Banknote> banknotes = new HashSet<Banknote>();
+                foreach(var b in _viewModel.Banknotes.OrderByDescending(x => x.Value))
                 {
                     while(b.Count < b.maxCount && result >= b.Value)
                     {
                         b.Count++;
                         result -= b.Value;
+                        if(!banknotes.Contains(b, new ComparerBanknotes()))
+                        {
+                            banknotes.Add(new Banknote(b.Value, b.Color) { Count = 1 });
+                        }
+                        else
+                        {
+                            var historyB = banknotes.First(x => x.Value == b.Value);
+                            historyB.Count++;
+                        }
                     }
                 }
                 if(result != 0)
                 {
                     MessageBox.Show($"Банкомат переполнен, возьмите оставшиеся деньги {result}", "", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
+                _viewModel.OnPropertyChanged(nameof(_viewModel.Balance));
+                _viewModel.OnPropertyChanged(nameof(_viewModel.BalanceState));
+                _viewModel.HistoryMessages.Add(new HistoryMessage(Operations.Add, banknotes));
                 DialogResult = true;
             }
             else

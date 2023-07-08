@@ -10,14 +10,7 @@
 
     <Window.Resources>
         <local:BalanceToColorConverter x:Key="BalanceToColorConverter"/>
-        <Style x:Key="BalanceStyle" TargetType="TextBlock">
-            <Setter Property="Background" Value="Green"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Balance, Converter={StaticResource ResourceKey=BalanceToColorConverter}, ConverterParameter=Banknotes}" Value="Orange">
-                    <Setter Property="Background" Value="Orange"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
+        <local:EOperationsToColorConverter x:Key="EOperationsToColorConverter"/>
         <Style x:Key="ButtonStyle" TargetType="Button">
             <Setter Property="Margin" Value="5"/>
             <Setter Property="Background" Value="Red"/>
@@ -26,6 +19,12 @@
                     <Setter Property="Background" Value="Green"/>
                 </Trigger>
             </Style.Triggers>
+        </Style>
+        <Style x:Key="TextBlockStyle" TargetType="TextBlock">
+            <Setter Property="Margin" Value="5,0,0,5"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="Background" Value="AliceBlue"/>
         </Style>
 
     </Window.Resources>
@@ -44,12 +43,61 @@
             <RowDefinition Height="44*"/>
             <RowDefinition Height="44*"/>
         </Grid.RowDefinitions>
+        <StackPanel Grid.Column="3" Grid.Row="0" Grid.RowSpan="5">
+            <TextBlock  Text="История операций:" Style="{StaticResource TextBlockStyle}"/>
+            <ListView ItemsSource="{Binding HistoryMessages, Mode=TwoWay}" BorderThickness="0" Background="AliceBlue">
+
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="5,0,0,5" 
+                                       Text="{Binding Path=EOperation, Mode=OneWay}" 
+                                       TextAlignment="Center" 
+                                       TextWrapping="Wrap" 
+                                       Height="25" 
+                                       MinWidth="25" 
+                                       Background="{Binding Path=EOperation, Mode=OneWay, Converter={StaticResource ResourceKey=EOperationsToColorConverter}}"/>
+                            <ListView ItemsSource="{Binding Banknotes, Mode=OneWay}" BorderThickness="0" Background="AliceBlue">
+                                <ListView.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ListView.ItemsPanel>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate DataType="local:Banknote">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Margin="5,0,0,5" 
+                                            Text="{Binding Path=Count, Mode=TwoWay}" 
+                                            TextAlignment="Center" 
+                                            TextWrapping="Wrap"
+                                            Height="25" 
+                                            MinWidth="25" 
+                                            Background="AliceBlue"/>
+                                            <TextBlock Margin="5,0,0,5" 
+                                            Text="{Binding Path=Value, Mode=OneWay}" 
+                                            TextAlignment="Center" 
+                                            TextWrapping="Wrap" 
+                                            Height="25" 
+                                            MinWidth="25" 
+                                            Background="{Binding Path=ColorBanknote, Mode=OneWay}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+
+                            </ListView>
+                            
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
+
         <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock Text="Баланс: "/>
-            <TextBlock x:Name="balanceTextBlock" Text="{Binding Balance}" Background="Green" Style="{StaticResource BalanceStyle}"/>
+            <TextBlock x:Name="balanceTextBlock" Text="{Binding Balance}" Background="{Binding BalanceState, Converter={StaticResource ResourceKey=BalanceToColorConverter}}"/>
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2">
-            <TextBox Margin="5,0,0,5" Text="Количество банкнот:" FontSize="14" Height="25" BorderThickness="0" Background="AliceBlue"/>
+            <TextBlock Text="Количество банкнот:" Style="{StaticResource TextBlockStyle}"/>
             <ListView ItemsSource="{Binding Banknotes, Mode=OneWay}" BorderThickness="0" Background="AliceBlue">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -67,7 +115,7 @@
             </ListView>
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2">
-            <TextBox Margin="5,0,0,5" Text="Номинал банкнот:" FontSize="14" Height="25" BorderThickness="0" Background="AliceBlue"/>
+            <TextBlock Text="Номинал банкнот:" Style="{StaticResource TextBlockStyle}"/>
             <ListView ItemsSource="{Binding Banknotes, Mode=OneWay}" BorderThickness="0" Background="AliceBlue">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -83,7 +131,7 @@
         </StackPanel>
 
 
-        <Button Grid.Column="0" Grid.Row="5" Content="Выдать деньги" Style="{StaticResource ButtonStyle}" Click="Button_Click" />
+        <Button Grid.Column="0" Grid.Row="5" Content="Выдать деньги" Style="{StaticResource ButtonStyle}" Command="{Binding GiveAwayMoneyCommand}" />
         <Button Grid.Column="1" Grid.Row="5" Content="Принять деньги" Style="{StaticResource ButtonStyle}" Command="{Binding AcceptMoneyCommand}"/>
 
     </Grid>

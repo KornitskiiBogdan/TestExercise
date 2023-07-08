@@ -13,7 +13,7 @@ namespace TestExercise
         {
             _value = denomination;
             _count = maxCount / 2;
-            _colorBanknote = colorBanknote;
+            Color = colorBanknote;
         }
         public readonly uint maxCount = 100;
         public uint Count
@@ -35,9 +35,9 @@ namespace TestExercise
         private uint _count;
         public Brush ColorBanknote
         {
-            get => new SolidColorBrush(_colorBanknote);
+            get => new SolidColorBrush(Color);
         }
-        private readonly Color _colorBanknote;
+        public readonly Color Color;
         public int Value
         {
             get => _value;

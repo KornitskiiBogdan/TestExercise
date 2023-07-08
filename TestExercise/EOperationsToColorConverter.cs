@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -10,22 +9,18 @@ using System.Windows.Media;
 
 namespace TestExercise
 {
-    public class BalanceToColorConverter : IValueConverter
+    public class EOperationsToColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            EBalanceState eBalanceState = (EBalanceState)value;
-            if(eBalanceState == EBalanceState.Low)
+            Operations eOperations = (Operations)value;
+            if (eOperations == Operations.Add)
             {
-                return new SolidColorBrush(Colors.Red);
-            }
-            else if(eBalanceState == EBalanceState.Medium)
-            {
-                return new SolidColorBrush(Colors.Orange);
+                return new SolidColorBrush(Colors.Green);
             }
             else
             {
-                return new SolidColorBrush(Colors.Green);
+                return new SolidColorBrush(Colors.Red);
             }
         }
 
