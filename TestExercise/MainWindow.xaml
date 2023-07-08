@@ -11,6 +11,7 @@
     <Window.Resources>
         <local:BalanceToColorConverter x:Key="BalanceToColorConverter"/>
         <local:EOperationsToColorConverter x:Key="EOperationsToColorConverter"/>
+        <local:EOperationsToString x:Key="EOperationsToString"/>
         <Style x:Key="ButtonStyle" TargetType="Button">
             <Setter Property="Margin" Value="5"/>
             <Setter Property="Background" Value="Red"/>
@@ -52,7 +53,7 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Margin="5,0,0,5" 
-                                           Text="{Binding Path=EOperation, Mode=OneWay}" 
+                                           Text="{Binding Path=EOperation, Mode=OneWay, Converter={StaticResource ResourceKey=EOperationsToString}}" 
                                            TextAlignment="Center" 
                                            TextWrapping="Wrap" 
                                            Height="25" 

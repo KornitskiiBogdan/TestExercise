@@ -60,6 +60,7 @@
     </Compile>
     <Compile Include="ComparerBanknotes.cs" />
     <Compile Include="EOperationsToColorConverter.cs" />
+    <Compile Include="EOperationsToString.cs" />
     <Compile Include="GiveAwayMoneyWindow.xaml.cs">
       <DependentUpon>GiveAwayMoneyWindow.xaml</DependentUpon>
     </Compile>
