@@ -58,12 +58,18 @@
     <Compile Include="AcceptMoneyWindow.xaml.cs">
       <DependentUpon>AcceptMoneyWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ToolsATM.cs" />
+    <Compile Include="GiveAwayMoneyWindow.xaml.cs">
+      <DependentUpon>GiveAwayMoneyWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ApplicationViewModel.cs" />
     <Compile Include="BalanceToColorConverter.cs" />
     <Compile Include="Banknote.cs" />
     <Compile Include="RelayCommand.cs" />
     <Page Include="AcceptMoneyWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GiveAwayMoneyWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

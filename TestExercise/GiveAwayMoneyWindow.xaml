@@ -1,0 +1,23 @@
+﻿<Window x:Class="TestExercise.GiveAwayMoneyWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Отдать деньги" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" Background="AliceBlue">
+    <Grid Margin="10" Background="AliceBlue">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Введите сумму кратную 10:"/>
+        <TextBox Name="sumBox" Grid.Row="1" MinWidth="250" Background="AliceBlue" PreviewTextInput="sumBox_TextInput" PreviewKeyDown="sumBox_KeyDown"/>
+
+        <WrapPanel Grid.Row="2" HorizontalAlignment="Right" Margin="0,15,0,0">
+            <Button IsDefault="True" Click="OK_Click" MinWidth="60" Margin="0,0,10,0" Content="OK"/>
+            <Button IsCancel="True" MinWidth="60" Content="Отмена"/>
+        </WrapPanel>
+    </Grid>
+</Window>
