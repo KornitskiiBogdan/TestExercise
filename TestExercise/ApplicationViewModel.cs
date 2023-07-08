@@ -9,7 +9,7 @@ namespace TestExercise
     public class ApplicationViewModel : BaseVM
     {
         public ICommand AcceptMoneyCommand { get; set; }
-        public ICommand GiveAwayMoneyCommand = new RelayCommand((o) => ToolsATM.GiveAway(o as ICollection<Banknote>));
+        public ICommand GiveAwayMoneyCommand { get; set; }
         public ApplicationViewModel()
         {
             Banknotes = new ObservableCollection<Banknote>()
@@ -17,6 +17,7 @@ namespace TestExercise
                 new Banknote(10, Colors.Aqua), new Banknote(50, Colors.Blue), new Banknote(100, Colors.Yellow), new Banknote(1000, Colors.Red)
             };
             AcceptMoneyCommand = new RelayCommand((o) => { var accepthMoneyWindow = new AcceptMoneyWindow(this); accepthMoneyWindow.ShowDialog(); });
+            GiveAwayMoneyCommand = new RelayCommand((o) => { var accepthMoneyWindow = new AcceptMoneyWindow(this); accepthMoneyWindow.ShowDialog(); });
         }
         public ObservableCollection<Banknote> Banknotes { get; private set; }
         public int Balance

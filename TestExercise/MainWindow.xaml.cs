@@ -26,19 +26,5 @@ namespace TestExercise
 
             DataContext = new ApplicationViewModel();
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void AcepthButton_Click(object sender, RoutedEventArgs e)
-        {
-            if(DataContext is ApplicationViewModel avm)
-            {
-                var accepthMoneyWindow = new AcceptMoneyWindow(avm); 
-                accepthMoneyWindow.ShowDialog();
-            }
-        }
     }
 }
