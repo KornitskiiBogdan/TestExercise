@@ -43,55 +43,57 @@
             <RowDefinition Height="44*"/>
             <RowDefinition Height="44*"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Column="3" Grid.Row="0" Grid.RowSpan="5">
-            <TextBlock  Text="История операций:" Style="{StaticResource TextBlockStyle}"/>
-            <ListView ItemsSource="{Binding HistoryMessages, Mode=TwoWay}" BorderThickness="0" Background="AliceBlue">
+        <ScrollViewer Grid.Column="3" Grid.Row="0" Grid.RowSpan="5">
+            <StackPanel>
+                <TextBlock  Text="История операций:" Style="{StaticResource TextBlockStyle}"/>
 
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Margin="5,0,0,5" 
-                                       Text="{Binding Path=EOperation, Mode=OneWay}" 
-                                       TextAlignment="Center" 
-                                       TextWrapping="Wrap" 
-                                       Height="25" 
-                                       MinWidth="25" 
-                                       Background="{Binding Path=EOperation, Mode=OneWay, Converter={StaticResource ResourceKey=EOperationsToColorConverter}}"/>
-                            <ListView ItemsSource="{Binding Banknotes, Mode=OneWay}" BorderThickness="0" Background="AliceBlue">
-                                <ListView.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Horizontal"/>
-                                    </ItemsPanelTemplate>
-                                </ListView.ItemsPanel>
-                                <ListView.ItemTemplate>
-                                    <DataTemplate DataType="local:Banknote">
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Margin="5,0,0,5" 
-                                            Text="{Binding Path=Count, Mode=TwoWay}" 
-                                            TextAlignment="Center" 
-                                            TextWrapping="Wrap"
-                                            Height="25" 
-                                            MinWidth="25" 
-                                            Background="AliceBlue"/>
-                                            <TextBlock Margin="5,0,0,5" 
-                                            Text="{Binding Path=Value, Mode=OneWay}" 
-                                            TextAlignment="Center" 
-                                            TextWrapping="Wrap" 
-                                            Height="25" 
-                                            MinWidth="25" 
-                                            Background="{Binding Path=ColorBanknote, Mode=OneWay}" />
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
+                <ListView ItemsSource="{Binding HistoryMessages, Mode=TwoWay}" BorderThickness="0" Background="AliceBlue">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="5,0,0,5" 
+                                           Text="{Binding Path=EOperation, Mode=OneWay}" 
+                                           TextAlignment="Center" 
+                                           TextWrapping="Wrap" 
+                                           Height="25" 
+                                           MinWidth="25" 
+                                           Background="{Binding Path=EOperation, Mode=OneWay, Converter={StaticResource ResourceKey=EOperationsToColorConverter}}"/>
+                                <ListView ItemsSource="{Binding Banknotes, Mode=OneWay}" BorderThickness="0" Background="AliceBlue">
+                                    <ListView.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </ListView.ItemsPanel>
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate DataType="local:Banknote">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Margin="5,0,0,5" 
+                                                Text="{Binding Path=Count, Mode=TwoWay}" 
+                                                TextAlignment="Center" 
+                                                TextWrapping="Wrap"
+                                                Height="25" 
+                                                MinWidth="25" 
+                                                Background="AliceBlue"/>
+                                                <TextBlock Margin="5,0,0,5" 
+                                                Text="{Binding Path=Value, Mode=OneWay}" 
+                                                TextAlignment="Center" 
+                                                TextWrapping="Wrap" 
+                                                Height="25" 
+                                                MinWidth="25" 
+                                                Background="{Binding Path=ColorBanknote, Mode=OneWay}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
 
-                            </ListView>
-                            
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackPanel>
+                                </ListView>
 
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+            </StackPanel>
+        </ScrollViewer>
         <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock Text="Баланс: "/>
             <TextBlock x:Name="balanceTextBlock" Text="{Binding Balance}" Background="{Binding BalanceState, Converter={StaticResource ResourceKey=BalanceToColorConverter}}"/>
