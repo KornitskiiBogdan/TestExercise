@@ -55,25 +55,25 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AcceptMoneyWindow.xaml.cs">
+    <Compile Include="View\AcceptMoneyWindow.xaml.cs">
       <DependentUpon>AcceptMoneyWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ComparerBanknotes.cs" />
-    <Compile Include="EOperationsToColorConverter.cs" />
-    <Compile Include="EOperationsToString.cs" />
-    <Compile Include="GiveAwayMoneyWindow.xaml.cs">
+    <Compile Include="Tools\ComparerBanknotes.cs" />
+    <Compile Include="Tools\EOperationsToColorConverter.cs" />
+    <Compile Include="Tools\EOperationsToString.cs" />
+    <Compile Include="View\GiveAwayMoneyWindow.xaml.cs">
       <DependentUpon>GiveAwayMoneyWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ApplicationViewModel.cs" />
-    <Compile Include="BalanceToColorConverter.cs" />
-    <Compile Include="Banknote.cs" />
-    <Compile Include="HistoryMessage.cs" />
-    <Compile Include="RelayCommand.cs" />
-    <Page Include="AcceptMoneyWindow.xaml">
+    <Compile Include="ViewModel\ApplicationViewModel.cs" />
+    <Compile Include="Tools\BalanceToColorConverter.cs" />
+    <Compile Include="ViewModel\Banknote.cs" />
+    <Compile Include="ViewModel\HistoryMessage.cs" />
+    <Compile Include="Tools\RelayCommand.cs" />
+    <Page Include="View\AcceptMoneyWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="GiveAwayMoneyWindow.xaml">
+    <Page Include="View\GiveAwayMoneyWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -85,7 +85,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BaseVM.cs" />
+    <Compile Include="ViewModel\BaseVM.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -117,5 +117,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
