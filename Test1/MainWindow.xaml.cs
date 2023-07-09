@@ -23,6 +23,24 @@ namespace Test1
         public MainWindow()
         {
             InitializeComponent();
+
+            DataContext = new ApplicationViewModel();
+        }
+
+        private void TextBox_TextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (!int.TryParse(e.Text, out _))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void TextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space)
+            {
+                e.Handled = true;
+            }
         }
     }
 }

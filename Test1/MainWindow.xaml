@@ -3,10 +3,32 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Test1"
+        xmlns:local="clr-namespace:Test1" d:DataContext="{d:DesignInstance Type=local:ApplicationViewModel}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="250" Width="350" MinHeight="250" MinWidth="350">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <ListView Grid.Column="1" Grid.Row="0" BorderThickness="0">
+            
+        </ListView>
+        <StackPanel Grid.Column="0" Grid.Row="0">
+            <Label FontSize="12" Content="Введите длину слова:"/>
+            <TextBox Name="wordLengthTextBox" Margin="5" Text="{Binding WorldLength}" PreviewTextInput="TextBox_TextInput" PreviewKeyDown="TextBox_KeyDown"/>
+            <RadioButton Name="radioButton" Content="Удалить знаки препинания"/>
+            <Button Margin="10" Content="Выбрать выходной файл" Grid.Column="1" Grid.Row="2" Command="{Binding AddOutputFile}"/>
+            <Button Margin="10" Content="Выбрать входной файл" Grid.Column="0" Grid.Row="2" Command="{Binding AddInputFile}"/>
+        </StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="0">
+           
+        </StackPanel>
+        <Button Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" Margin="10" Content="Обработать текст" Command="{Binding CalculateCommand}" CommandParameter="{Binding ElementName=radioButton, Path=IsChecked}"/>
+
     </Grid>
 </Window>
