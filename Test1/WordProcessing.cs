@@ -20,12 +20,6 @@ namespace Test1
             }
             return false;
         }
-        public static async Task<EStatus> Calculate(string inputFilePath, string outputFilePath, int minLength, bool removePunctuation)
-        {
-            Task<EStatus> task = new Task<EStatus>(() => CalculateStatus(inputFilePath, outputFilePath, minLength, removePunctuation));
-            task.Start();
-            return await task;
-        }
         public static EStatus CalculateStatus(string inputFilePath, string outputFilePath, int minLength, bool removePunctuation)
         {
             string ext = Path.GetExtension(inputFilePath);

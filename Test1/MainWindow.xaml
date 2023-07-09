@@ -49,7 +49,7 @@
             <Label FontSize="12" Margin="5" Content="Введите длину слова:"/>
             <TextBox Name="wordLengthTextBox" Margin="5" Text="{Binding WorldLength}" PreviewTextInput="TextBox_TextInput" PreviewKeyDown="TextBox_KeyDown"/>
             <RadioButton Margin="5" Name="radioButton" Content="Удалить знаки препинания"/>
-            <Button Margin="5" Content="Выберите выходной файл" Grid.Column="1" Grid.Row="2" Command="{Binding AddOutputFile}"/>
+            <Button Margin="5" Content="Выберите выходные файлы" Grid.Column="1" Grid.Row="2" Command="{Binding AddOutputFile}"/>
             <Button Margin="5" Content="Выберите входные файлы" Grid.Column="0" Grid.Row="2" Command="{Binding AddInputFile}"/>
         </StackPanel>
         <StackPanel Grid.Column="1" Grid.Row="0">
