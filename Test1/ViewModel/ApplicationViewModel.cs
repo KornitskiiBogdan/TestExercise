@@ -5,8 +5,9 @@ using System.Windows.Input;
 using System.Windows;
 using TestExercise;
 using Microsoft.Win32;
+using Test1.Model;
 
-namespace Test1
+namespace Test1.ViewModel
 {
     public class ApplicationViewModel : BaseVM
     {
@@ -57,7 +58,7 @@ namespace Test1
             {
                 return _calculateCommand ?? (_calculateCommand = new RelayCommand(async o =>
                 {
-                    if(_filesInputPath.Count != _filesOutputPath.Count)
+                    if (_filesInputPath.Count != _filesOutputPath.Count)
                     {
                         MessageBox.Show("количество входных и выходных файлов должно быть одинаково. Выберите заново файлы", "Обработка", MessageBoxButton.OK, MessageBoxImage.Error);
                     }

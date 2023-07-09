@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TestExercise;
 
-namespace Test1
+namespace Test1.ViewModel
 {
     public enum EStatus
     {

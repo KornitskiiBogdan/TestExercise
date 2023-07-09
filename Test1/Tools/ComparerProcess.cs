@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Test1.ViewModel;
 
-namespace Test1
+namespace Test1.Tools
 {
     internal class ComparerProcess : IEqualityComparer<HistoryProcessing>
     {

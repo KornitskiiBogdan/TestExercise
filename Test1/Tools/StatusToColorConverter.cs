@@ -6,8 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Media;
+using Test1.ViewModel;
 
-namespace Test1
+namespace Test1.Tools
 {
     public class StatusToColorConverter : IValueConverter
     {

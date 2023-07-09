@@ -5,8 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Test1.ViewModel;
 
-namespace Test1
+namespace Test1.Model
 {
     public static class WordProcessing
     {
@@ -23,12 +24,13 @@ namespace Test1
         public static EStatus CalculateStatus(string inputFilePath, string outputFilePath, int minLength, bool removePunctuation)
         {
             string extInput = Path.GetExtension(inputFilePath);
-            if (extInput != ".txt" || outputFilePath != ".txt")
+            string extOutput = Path.GetExtension(outputFilePath);
+            if (extInput != ".txt" || extOutput != ".txt")
             {
                 return EStatus.Failed;
             }
             try
-            {                
+            {
                 using (StreamReader r = new StreamReader(inputFilePath))
                 {
                     using (StreamWriter w = new StreamWriter(outputFilePath, false))
@@ -41,7 +43,7 @@ namespace Test1
                         r.Close();
                     }
 
-                } 
+                }
                 return EStatus.Done;
             }
             catch

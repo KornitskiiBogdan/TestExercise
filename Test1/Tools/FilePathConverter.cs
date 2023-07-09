@@ -3,7 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Windows.Data;
 
-namespace Test1
+namespace Test1.Tools
 {
     public class FilePathConverter : IValueConverter
     {
