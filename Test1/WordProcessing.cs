@@ -35,43 +35,7 @@ namespace Test1
                     {
                         while (!r.EndOfStream)
                         {
-                            StringBuilder sb = new StringBuilder(r.ReadLine());
-                            int i = 0;
-                            int lengthWord = 0;
-                            while (i < sb.Length)
-                            {
-                                if (removePunctuation && char.IsPunctuation(sb[i]))
-                                {
-                                    sb.Remove(i, 1);
-                                    if (!RemoveString(sb, minLength, ref i, lengthWord) && i > 0)
-                                    {
-                                        i--;
-                                    }
-                                    lengthWord = 0;
-                                }
-                                else if (!char.IsSeparator(sb[i]))
-                                {
-                                    lengthWord++;
-                                }
-                                else
-                                {
-                                    if (i > 0 && char.IsSeparator(sb[i - 1]))
-                                    {
-                                        sb.Remove(i, 1);
-                                        if (i > 0)
-                                        {
-                                            i--;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        RemoveString(sb, minLength, ref i, lengthWord);
-                                    }
-                                    lengthWord = 0;
-                                }
-                                i++;
-                            }
-                            w.WriteLine(sb);
+                            w.WriteLine(Calculate(r.ReadLine(), minLength, removePunctuation));
                         }
                         w.Close();
                         r.Close();
@@ -85,6 +49,46 @@ namespace Test1
 
             }
             return EStatus.Failed;
+        }
+        public static StringBuilder Calculate(string? line, int minLength, bool removePunctuation)
+        {
+            StringBuilder sb = new StringBuilder(line);
+            int i = 0;
+            int lengthWord = 0;
+            while (i < sb.Length)
+            {
+                if (removePunctuation && char.IsPunctuation(sb[i]))
+                {
+                    sb.Remove(i, 1);
+                    if (!RemoveString(sb, minLength, ref i, lengthWord) && i > 0)
+                    {
+                        i--;
+                    }
+                    lengthWord = 0;
+                }
+                else if (!char.IsSeparator(sb[i]))
+                {
+                    lengthWord++;
+                }
+                else
+                {
+                    if (i > 0 && char.IsSeparator(sb[i - 1]))
+                    {
+                        sb.Remove(i, 1);
+                        if (i > 0)
+                        {
+                            i--;
+                        }
+                    }
+                    else
+                    {
+                        RemoveString(sb, minLength, ref i, lengthWord);
+                    }
+                    lengthWord = 0;
+                }
+                i++;
+            }
+            return sb;
         }
     }
 }
