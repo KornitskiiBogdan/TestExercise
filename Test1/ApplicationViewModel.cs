@@ -1,13 +1,10 @@
-﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows;
 using TestExercise;
+using Microsoft.Win32;
 
 namespace Test1
 {
@@ -44,9 +41,10 @@ namespace Test1
                 {
                     OpenFileDialog openFileDialog = new OpenFileDialog();
                     openFileDialog.Filter = "Text files (*.txt)|*.txt";
+                    openFileDialog.Multiselect = true;
                     if (openFileDialog.ShowDialog() ?? false)
                     {
-                        FileOutputPath = openFileDialog.FileName;
+                        _filesOutputPath = new List<string>(openFileDialog.FileNames);
                     }
                 }));
             }
@@ -59,38 +57,46 @@ namespace Test1
             {
                 return _calculateCommand ?? (_calculateCommand = new RelayCommand(async o =>
                 {
-                    foreach (var fileInput in _filesInputPath)
+                    if(_filesInputPath.Count != _filesOutputPath.Count)
                     {
-                        var process = new HistoryProcessing(fileInput, FileOutputPath);
-                        if (fileInput == string.Empty || FileOutputPath == string.Empty)
-                        {
-                            MessageBox.Show("Выберите файлы", "Обработка", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        }
-                        else if (WorldLength == string.Empty)
-                        {
-                            MessageBox.Show("Введите длину строки", "Обработка", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        }
-                        else
-                        {
-                            HistoryProcessings.Add(process);
-                            process.Status = await WordProcessing.Calculate(fileInput, FileOutputPath, int.Parse(WorldLength), (bool)o);
-                        }
+                        MessageBox.Show("количество входных и выходных файлов должно быть одинаково. Выберите заново файлы", "Обработка", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
+                    else
+                    {
+                        for (int i = 0; i < _filesInputPath.Count; i++)
+                        {
+                            var inputFile = _filesInputPath[i];
+                            var outputFile = _filesOutputPath[i];
+                            var process = new HistoryProcessing(inputFile, outputFile);
+                            if (inputFile == string.Empty || outputFile == string.Empty)
+                            {
+                                MessageBox.Show("Выберите файлы", "Обработка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            }
+                            else if (WorldLength == string.Empty)
+                            {
+                                MessageBox.Show("Введите длину строки", "Обработка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            }
+                            else
+                            {
+                                HistoryProcessings.Add(process);
+                                _listTasks.Add(Task.Run(() =>
+                                {
+                                    process.Status = WordProcessing.CalculateStatus(inputFile, outputFile, int.Parse(WorldLength), (bool)o);
+                                }));
+                            }
+                        }
+                        await Task.WhenAll(_listTasks.ToArray());
+                        _listTasks.Clear();
+                    }
+                    _filesOutputPath.Clear();
+                    _filesInputPath.Clear();
                 }));
             }
         }
         private ICommand? _calculateCommand;
+        public List<Task> _listTasks = new List<Task>();
         private List<string> _filesInputPath = new List<string>();
-        public string FileOutputPath
-        {
-            get => _fileOutputPath;
-            private set
-            {
-                _fileOutputPath = value;
-                OnPropertyChanged();
-            }
-        }
-        private string _fileOutputPath = string.Empty;
+        private List<string> _filesOutputPath = new List<string>();
 
 
         public string WorldLength

@@ -26,68 +26,74 @@ namespace Test1
             task.Start();
             return await task;
         }
-        private static EStatus CalculateStatus(string inputFilePath, string outputFilePath, int minLength, bool removePunctuation)
+        public static EStatus CalculateStatus(string inputFilePath, string outputFilePath, int minLength, bool removePunctuation)
         {
             string ext = Path.GetExtension(inputFilePath);
-            if (ext == ".txt")
+            try
             {
-                using (StreamReader r = new StreamReader(inputFilePath))
+                if (ext == ".txt")
                 {
-                    using (StreamWriter w = new StreamWriter(outputFilePath, true))
+                    using (StreamReader r = new StreamReader(inputFilePath))
                     {
-                        while (!r.EndOfStream)
+                        using (StreamWriter w = new StreamWriter(outputFilePath, false))
                         {
-                            StringBuilder sb = new StringBuilder(r.ReadLine());
-                            int i = 0;
-                            int lengthWord = 0;
-                            while (i < sb.Length)
+                            while (!r.EndOfStream)
                             {
-                                if (removePunctuation && char.IsPunctuation(sb[i]))
+                                StringBuilder sb = new StringBuilder(r.ReadLine());
+                                int i = 0;
+                                int lengthWord = 0;
+                                while (i < sb.Length)
                                 {
-                                    sb.Remove(i, 1);
-                                    if (!RemoveString(sb, minLength, ref i, lengthWord) && i > 0)
-                                    {
-                                        i--;
-                                    }
-                                    lengthWord = 0;
-                                }
-                                else if (!char.IsSeparator(sb[i]))
-                                {
-                                    lengthWord++;
-                                }
-                                else
-                                {
-                                    if (i > 0 && char.IsSeparator(sb[i - 1]))
+                                    if (removePunctuation && char.IsPunctuation(sb[i]))
                                     {
                                         sb.Remove(i, 1);
-                                        if (i > 0)
+                                        if (!RemoveString(sb, minLength, ref i, lengthWord) && i > 0)
                                         {
                                             i--;
                                         }
+                                        lengthWord = 0;
+                                    }
+                                    else if (!char.IsSeparator(sb[i]))
+                                    {
+                                        lengthWord++;
                                     }
                                     else
                                     {
-                                        RemoveString(sb, minLength, ref i, lengthWord);
+                                        if (i > 0 && char.IsSeparator(sb[i - 1]))
+                                        {
+                                            sb.Remove(i, 1);
+                                            if (i > 0)
+                                            {
+                                                i--;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            RemoveString(sb, minLength, ref i, lengthWord);
+                                        }
+                                        lengthWord = 0;
                                     }
-                                    lengthWord = 0;
+                                    i++;
                                 }
-                                i++;
+                                w.WriteLine(sb);
                             }
-                            w.WriteLine(sb);
+                            w.Close();
+                            r.Close();
                         }
-                        w.Close();
-                        r.Close();
-                    }
 
+                    } 
+                    return EStatus.Done;
                 }
-                MessageBox.Show("Обработка закончена", "Обработка текста", MessageBoxButton.OK, MessageBoxImage.Information);
-                return EStatus.Done;
+                else
+                {
+                    return EStatus.Failed;
+                }
             }
-            else
+            catch
             {
-                MessageBox.Show("Файл данного типа не поддерживается", "Обработка текста", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return EStatus.Failed;
+
             }
+            return EStatus.Failed;
         }
     }
 }

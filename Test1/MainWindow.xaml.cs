@@ -23,8 +23,8 @@ namespace Test1
         public MainWindow()
         {
             InitializeComponent();
-
-            //DataContext = new ApplicationViewModel();
+            
+            DataContext = new ApplicationViewModel();
         }
         private void TextBox_TextInput(object sender, TextCompositionEventArgs e)
         {
