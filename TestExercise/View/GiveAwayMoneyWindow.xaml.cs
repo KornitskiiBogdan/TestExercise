@@ -45,8 +45,21 @@ namespace TestExercise
                 HashSet<Banknote> banknotes = new HashSet<Banknote>();
                 if (smallRadioButton.IsChecked ?? false)
                 {
-                    foreach (var b in _viewModel.Banknotes.OrderBy(x => x.Value))
+                    var collection = _viewModel.Banknotes.OrderBy(x => x.Value).ToArray();
+                    bool returnBeginning = false;
+                    bool toEnd = false;
+                    for (int i = 0; i < collection.Length; i++)
                     {
+                        var b = collection[i];
+                        if (i == collection.Length - 1)
+                        {
+                            toEnd = true;
+                        }
+                        if (result > b.Value * b.Count && !toEnd)
+                        {
+                            returnBeginning = true;
+                            continue;
+                        }
                         while (result >= b.Value && b.Count > 0)
                         {
                             b.Count--;
@@ -61,6 +74,13 @@ namespace TestExercise
                                 historyB.Count++;
                             }
                         }
+                        if(returnBeginning)
+                        {
+                            toEnd = true;
+                            returnBeginning = false;
+                            i = -1;
+                        }
+                        
                     }
                 }
                 else if(largeRadioButton.IsChecked ?? false)
@@ -83,6 +103,7 @@ namespace TestExercise
                         }
                     }
                 }
+                MessageBox.Show($"Банкомат выдал{banknotes.Sum(x => x.Value * x.Count)}", "Банкомат", MessageBoxButton.OK, MessageBoxImage.Information);
                 _viewModel.OnPropertyChanged(nameof(_viewModel.Balance));
                 _viewModel.OnPropertyChanged(nameof(_viewModel.BalanceState));
                 _viewModel.HistoryMessages.Add(new HistoryMessage(Operations.Remove, banknotes));
