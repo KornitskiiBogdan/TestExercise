@@ -1,39 +1,41 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
+using System.Windows;
 using TestExercise;
 
 namespace Test1
 {
     public class ApplicationViewModel : BaseVM
     {
-        public ApplicationViewModel() 
-        { 
-
+        public ApplicationViewModel()
+        {
+            HistoryProcessings = new ObservableCollection<HistoryProcessing>();
         }
-        public ICommand AddInputFile 
-        { 
+        public ObservableCollection<HistoryProcessing> HistoryProcessings { get; set; }
+        public ICommand AddInputFile
+        {
             get
             {
                 return _addInputFile ?? (_addInputFile = new RelayCommand(o =>
                 {
                     OpenFileDialog openFileDialog = new OpenFileDialog();
                     openFileDialog.Filter = "Text files (*.txt)|*.txt";
+                    openFileDialog.Multiselect = true;
                     if (openFileDialog.ShowDialog() ?? false)
                     {
-                        FileInputPath = openFileDialog.FileName;
+                        _filesInputPath = new List<string>(openFileDialog.FileNames);
                     }
-                
+
                 }));
-            } 
+            }
         }
-        private ICommand _addInputFile;
+        private ICommand? _addInputFile;
         public ICommand AddOutputFile
         {
             get
@@ -49,65 +51,54 @@ namespace Test1
                 }));
             }
         }
-        private ICommand _addOutputFile;
-        
+        private ICommand? _addOutputFile;
+
         public ICommand CalculateCommand
         {
             get
             {
                 return _calculateCommand ?? (_calculateCommand = new RelayCommand(async o =>
                 {
-                    if(FileInputPath == string.Empty  || FileOutputPath == string.Empty)
+                    foreach (var fileInput in _filesInputPath)
                     {
-                        MessageBox.Show("Выберите файлы", "Обработка", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    }
-                    else if(WorldLength == string.Empty)
-                    {
-                        MessageBox.Show("Введите длину строки", "Обработка", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    }
-                    else if (_startPrevCommand)
-                    {
-                        MessageBox.Show("Идет обработка предыдущего файла, дождитесь окончания", "Обработка", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                    else
-                    {
-                        _startPrevCommand = true;
-                        await WordProcessing.Calculate(FileInputPath, FileOutputPath, int.Parse(WorldLength), (bool)o);
-                        _startPrevCommand = false;
+                        var process = new HistoryProcessing(fileInput, FileOutputPath);
+                        if (fileInput == string.Empty || FileOutputPath == string.Empty)
+                        {
+                            MessageBox.Show("Выберите файлы", "Обработка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        }
+                        else if (WorldLength == string.Empty)
+                        {
+                            MessageBox.Show("Введите длину строки", "Обработка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        }
+                        else
+                        {
+                            HistoryProcessings.Add(process);
+                            process.Status = await WordProcessing.Calculate(fileInput, FileOutputPath, int.Parse(WorldLength), (bool)o);
+                        }
                     }
                 }));
             }
         }
-        private bool _startPrevCommand;
-        private ICommand _calculateCommand;
-        public string FileInputPath 
-        { 
-            get => _fileInputPath; 
-            private set 
-            { 
-                _fileInputPath = value; 
-                OnPropertyChanged(); 
-            } 
-        }
-        private string _fileInputPath = string.Empty;
-        public string FileOutputPath 
-        { 
+        private ICommand? _calculateCommand;
+        private List<string> _filesInputPath = new List<string>();
+        public string FileOutputPath
+        {
             get => _fileOutputPath;
-            private set 
-            { 
-                _fileOutputPath = value; 
+            private set
+            {
+                _fileOutputPath = value;
                 OnPropertyChanged();
             }
         }
         private string _fileOutputPath = string.Empty;
-        
+
 
         public string WorldLength
         {
             get => _worldLength;
             set
             {
-                if(int.TryParse(value, out _))
+                if (int.TryParse(value, out _))
                 {
                     _worldLength = value;
                     OnPropertyChanged();

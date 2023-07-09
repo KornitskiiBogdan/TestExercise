@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Test1
+namespace WordProcessing
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -24,8 +24,9 @@ namespace Test1
         {
             InitializeComponent();
 
-            //DataContext = new ApplicationViewModel();
+            DataContext = new ApplicationViewModel();
         }
+
         private void TextBox_TextInput(object sender, TextCompositionEventArgs e)
         {
             if (!int.TryParse(e.Text, out _))
