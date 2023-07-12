@@ -11,16 +11,7 @@ namespace Test1.Model
 {
     public static class WordProcessing
     {
-        private static bool RemoveString(StringBuilder sb, int length, ref int i, int lengthWord)
-        {
-            if (lengthWord > 0 && lengthWord <= length)
-            {
-                sb.Remove(i - lengthWord, lengthWord);
-                i -= lengthWord + 1;
-                return true;
-            }
-            return false;
-        }
+        
         public static EStatus CalculateStatus(string inputFilePath, string outputFilePath, int minLength, bool removePunctuation)
         {
             string extInput = Path.GetExtension(inputFilePath);
@@ -35,9 +26,16 @@ namespace Test1.Model
                 {
                     using (StreamWriter w = new StreamWriter(outputFilePath, false))
                     {
+                        //int index = 0;
                         while (!r.EndOfStream)
                         {
-                            w.WriteLine(Calculate(r.ReadLine(), minLength, removePunctuation));
+                            char[] buffer = new char[1024];
+                            if(r.Read(buffer) > 0)
+                            {
+                                //index += buffer.Length;
+                                w.Write(Calculate(buffer.ToList(), minLength, removePunctuation));
+                            }
+                            
                         }
                         w.Close();
                         r.Close();
@@ -46,37 +44,48 @@ namespace Test1.Model
                 }
                 return EStatus.Done;
             }
-            catch
+            catch(Exception e)
             {
-
+                MessageBox.Show(e.Message, "Обработка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             return EStatus.Failed;
         }
-        public static StringBuilder Calculate(string? line, int minLength, bool removePunctuation)
+        private static bool RemoveString(List<char> line, int length, ref int i, int lengthWord)
         {
-            StringBuilder sb = new StringBuilder(line);
+            if (lengthWord > 0 && lengthWord <= length)
+            {
+                line.RemoveRange(i - lengthWord, lengthWord);
+                i -= lengthWord + 1;
+                return true;
+            }
+            return false;
+        }
+        public static char[] Calculate(List<char> line, int minLength, bool removePunctuation)
+        {
             int i = 0;
             int lengthWord = 0;
-            while (i < sb.Length)
+            while (i < line.Count)
             {
-                if (removePunctuation && char.IsPunctuation(sb[i]))
+                char c = line[i];
+                
+                if (removePunctuation && char.IsPunctuation(c))
                 {
-                    sb.Remove(i, 1);
-                    if (!RemoveString(sb, minLength, ref i, lengthWord) && i > 0)
+                    line.Remove(c);
+                    if (!RemoveString(line, minLength, ref i, lengthWord) && i > 0)
                     {
                         i--;
                     }
                     lengthWord = 0;
                 }
-                else if (!char.IsSeparator(sb[i]))
+                else if (char.IsLetterOrDigit(c))
                 {
                     lengthWord++;
                 }
                 else
                 {
-                    if (i > 0 && char.IsSeparator(sb[i - 1]))
+                    if (i > 0 && char.IsSeparator(line[i - 1]))
                     {
-                        sb.Remove(i, 1);
+                        line.Remove(c);
                         if (i > 0)
                         {
                             i--;
@@ -84,13 +93,13 @@ namespace Test1.Model
                     }
                     else
                     {
-                        RemoveString(sb, minLength, ref i, lengthWord);
+                        RemoveString(line, minLength, ref i, lengthWord);
                     }
                     lengthWord = 0;
                 }
                 i++;
             }
-            return sb;
+            return line.ToArray();
         }
     }
 }
