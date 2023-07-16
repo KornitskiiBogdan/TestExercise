@@ -12,27 +12,8 @@ namespace TestExercise
         public Banknote(int denomination, Color colorBanknote)
         {
             _value = denomination;
-            _count = maxCount / 2;
             Color = colorBanknote;
         }
-        public readonly uint maxCount = 100;
-        public uint Count
-        {
-            get => _count;
-            set
-            {
-                if(value > maxCount)
-                {
-
-                }
-                else
-                {
-                    _count = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        private uint _count;
         public Brush ColorBanknote
         {
             get => new SolidColorBrush(Color);

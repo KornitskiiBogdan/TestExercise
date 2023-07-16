@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TestExercise
 {
-    public class ComparerBanknotes : IEqualityComparer<Banknote>
+    public class ComparerBanknote : IEqualityComparer<Banknote>
     {
         public bool Equals(Banknote x, Banknote y)
         {

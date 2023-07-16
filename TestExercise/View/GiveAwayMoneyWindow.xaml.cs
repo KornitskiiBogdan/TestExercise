@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace TestExercise
 {
@@ -42,69 +43,18 @@ namespace TestExercise
                     DialogResult = true;
                     return;
                 }
-                HashSet<Banknote> banknotes = new HashSet<Banknote>();
+                HashSet<Banknotes> banknotes = new HashSet<Banknotes>();
                 if (smallRadioButton.IsChecked ?? false)
                 {
-                    var collection = _viewModel.Banknotes.OrderBy(x => x.Value).ToArray();
-                    bool returnBeginning = false;
-                    bool toEnd = false;
-                    for (int i = 0; i < collection.Length; i++)
-                    {
-                        var b = collection[i];
-                        if (i == collection.Length - 1)
-                        {
-                            toEnd = true;
-                        }
-                        if (result > b.Value * b.Count && !toEnd)
-                        {
-                            returnBeginning = true;
-                            continue;
-                        }
-                        while (result >= b.Value && b.Count > 0)
-                        {
-                            b.Count--;
-                            result -= b.Value;
-                            if (!banknotes.Contains(b, new ComparerBanknotes()))
-                            {
-                                banknotes.Add(new Banknote(b.Value, b.Color) { Count = 1 });
-                            }
-                            else
-                            {
-                                var historyB = banknotes.First(x => x.Value == b.Value);
-                                historyB.Count++;
-                            }
-                        }
-                        if(returnBeginning)
-                        {
-                            toEnd = true;
-                            returnBeginning = false;
-                            i = -1;
-                        }
-                        
-                    }
+                    banknotes = _viewModel.ATMModel.GiveAwayMoney(true, false, result);
                 }
                 else if(largeRadioButton.IsChecked ?? false)
                 {
-                    foreach (var b in _viewModel.Banknotes.OrderByDescending(x => x.Value))
-                    {
-                        while (result >= b.Value && b.Count > 0)
-                        {
-                            b.Count--;
-                            result -= b.Value;
-                            if (!banknotes.Contains(b, new ComparerBanknotes()))
-                            {
-                                banknotes.Add(new Banknote(b.Value, b.Color) { Count = 1 });
-                            }
-                            else
-                            {
-                                var historyB = banknotes.First(x => x.Value == b.Value);
-                                historyB.Count++;
-                            }
-                        }
-                    }
+                    banknotes = _viewModel.ATMModel.GiveAwayMoney(false, true, result);
                 }
                 MessageBox.Show($"Банкомат выдал{banknotes.Sum(x => x.Value * x.Count)}", "Банкомат", MessageBoxButton.OK, MessageBoxImage.Information);
                 _viewModel.OnPropertyChanged(nameof(_viewModel.Balance));
+                _viewModel.OnPropertyChanged(nameof(_viewModel.Banknotes));
                 _viewModel.OnPropertyChanged(nameof(_viewModel.BalanceState));
                 _viewModel.HistoryMessages.Add(new HistoryMessage(Operations.Remove, banknotes));
                 DialogResult = true;

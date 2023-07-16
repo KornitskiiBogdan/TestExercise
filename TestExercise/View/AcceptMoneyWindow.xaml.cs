@@ -20,29 +20,13 @@ namespace TestExercise
         {
             if(int.TryParse(sumBox.Text, out int result) && result % 10 == 0)
             {
-                HashSet<Banknote> banknotes = new HashSet<Banknote>();
-                foreach(var b in _viewModel.Banknotes.OrderByDescending(x => x.Value))
-                {
-                    while(b.Count < b.maxCount && result >= b.Value)
-                    {
-                        b.Count++;
-                        result -= b.Value;
-                        if(!banknotes.Contains(b, new ComparerBanknotes()))
-                        {
-                            banknotes.Add(new Banknote(b.Value, b.Color) { Count = 1 });
-                        }
-                        else
-                        {
-                            var historyB = banknotes.First(x => x.Value == b.Value);
-                            historyB.Count++;
-                        }
-                    }
-                }
+                HashSet<Banknotes> banknotes = _viewModel.ATMModel.AcceptMoney(ref result);
                 if(result != 0)
                 {
                     MessageBox.Show($"Банкомат переполнен, возьмите оставшиеся деньги {result}", "", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 _viewModel.OnPropertyChanged(nameof(_viewModel.Balance));
+                _viewModel.OnPropertyChanged(nameof(_viewModel.Banknotes));
                 _viewModel.OnPropertyChanged(nameof(_viewModel.BalanceState));
                 _viewModel.HistoryMessages.Add(new HistoryMessage(Operations.Add, banknotes));
                 DialogResult = true;

@@ -10,12 +10,12 @@ namespace TestExercise
     }
     public class HistoryMessage : BaseVM
     {
-        public HistoryMessage(Operations operation, ICollection<Banknote> banknotes) 
+        public HistoryMessage(Operations operation, ICollection<Banknotes> banknotes) 
         {
             _operation = operation;
-            Banknotes = new ObservableCollection<Banknote>(banknotes);
+            Banknotes = new ObservableCollection<Banknotes>(banknotes);
         }
-        public ObservableCollection<Banknote> Banknotes { get; } 
+        public ObservableCollection<Banknotes> Banknotes { get; } 
         public Operations EOperation { get => _operation; }
         private readonly Operations _operation;
     }
