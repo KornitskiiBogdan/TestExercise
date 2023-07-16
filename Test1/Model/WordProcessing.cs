@@ -26,16 +26,61 @@ namespace Test1.Model
                 {
                     using (StreamWriter w = new StreamWriter(outputFilePath, false))
                     {
-                        //int index = 0;
+                        bool writeInFile = false;
+                        bool emptyString = true;
+                        StringBuilder stringBuffer = new StringBuilder();
                         while (!r.EndOfStream)
                         {
-                            char[] buffer = new char[1024];
-                            if(r.Read(buffer) > 0)
+                            int intSymbol = r.Read();
+                            if(intSymbol > -1)
                             {
-                                //index += buffer.Length;
-                                w.Write(Calculate(buffer.ToList(), minLength, removePunctuation));
-                            }
-                            
+                                char c = (char)intSymbol;
+                                if (char.IsPunctuation(c))
+                                {
+                                    if (!removePunctuation)
+                                    {
+                                        w.Write(c);
+                                        emptyString = false;
+                                    }
+                                    writeInFile = false;
+                                    stringBuffer.Clear();
+                                }
+                                else if(c.Equals('\n') || c.Equals('\r') || char.IsSeparator(c))
+                                {
+                                    if (c.Equals('\n') || c.Equals('\r'))
+                                    {
+                                        if (!emptyString)
+                                        {
+                                            w.Write(c);
+                                            emptyString = true;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (!emptyString)
+                                        {
+                                            w.Write(c);
+                                        }
+                                    }
+                                    stringBuffer.Clear();
+                                    writeInFile = false;
+                                }
+                                else
+                                {
+                                    if (stringBuffer.Length < minLength && !writeInFile)
+                                    {
+                                        stringBuffer.Append(c);
+                                    }
+                                    else
+                                    {
+                                        writeInFile = true;
+                                        w.Write(stringBuffer);
+                                        w.Write(c);
+                                        emptyString = false;
+                                        stringBuffer.Clear();
+                                    }
+                                }
+                            } 
                         }
                         w.Close();
                         r.Close();
@@ -49,57 +94,6 @@ namespace Test1.Model
                 MessageBox.Show(e.Message, "Обработка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             return EStatus.Failed;
-        }
-        private static bool RemoveString(List<char> line, int length, ref int i, int lengthWord)
-        {
-            if (lengthWord > 0 && lengthWord <= length)
-            {
-                line.RemoveRange(i - lengthWord, lengthWord);
-                i -= lengthWord + 1;
-                return true;
-            }
-            return false;
-        }
-        public static char[] Calculate(List<char> line, int minLength, bool removePunctuation)
-        {
-            int i = 0;
-            int lengthWord = 0;
-            while (i < line.Count)
-            {
-                char c = line[i];
-                
-                if (removePunctuation && char.IsPunctuation(c))
-                {
-                    line.Remove(c);
-                    if (!RemoveString(line, minLength, ref i, lengthWord) && i > 0)
-                    {
-                        i--;
-                    }
-                    lengthWord = 0;
-                }
-                else if (char.IsLetterOrDigit(c))
-                {
-                    lengthWord++;
-                }
-                else
-                {
-                    if (i > 0 && char.IsSeparator(line[i - 1]))
-                    {
-                        line.Remove(c);
-                        if (i > 0)
-                        {
-                            i--;
-                        }
-                    }
-                    else
-                    {
-                        RemoveString(line, minLength, ref i, lengthWord);
-                    }
-                    lengthWord = 0;
-                }
-                i++;
-            }
-            return line.ToArray();
         }
     }
 }
