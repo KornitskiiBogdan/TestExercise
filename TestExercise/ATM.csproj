@@ -95,8 +95,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ATMModel.cs" />
-    <Compile Include="Banknotes.cs" />
+    <Compile Include="Model\ATMModel.cs" />
+    <Compile Include="ViewModel\Banknotes.cs" />
     <Compile Include="View\AcceptMoneyWindow.xaml.cs">
       <DependentUpon>AcceptMoneyWindow.xaml</DependentUpon>
     </Compile>
