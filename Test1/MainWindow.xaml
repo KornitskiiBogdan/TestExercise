@@ -31,14 +31,14 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Margin="5,0,0,5" Text="{Binding Path=Status}" Background="{Binding Path=Status, Converter={StaticResource ResourceKey=StatusToColorConverter}}" Height="20" MinWidth="20"/>
                         <WrapPanel Orientation="Vertical">
-                            <TextBlock Margin="5,0,0,5" Text="{Binding Path=FileOutput, Converter={StaticResource ResourceKey=FilePathConverter}}"/>
+                            <TextBlock Margin="5,0,0,5" Text="{Binding Path=FileInput, Converter={StaticResource ResourceKey=FilePathConverter}}"/>
                             <Path Fill="Black" Style="{StaticResource IconBase}" Height="20" Margin="2,0"
                                               Data="M2490 5102 c-25 -14 -276 -329 -922 -1157 -487 -625 -889 -1147 -892
                                                     -1159 -19 -72 7 -144 67 -184 l41 -27 593 -3 593 -3 0 -1228 0 -1228 23 -33
                                                     c12 -18 35 -43 50 -54 28 -21 37 -21 517 -21 478 0 489 0 516 21 15 11 37 33
                                                     48 48 21 27 21 35 26 1264 l5 1237 600 5 600 5 31 22 c45 32 67 85 62 144 -6
                                                     59 87 -65 -975 1298 -439 563 -810 1033 -825 1044 -38 29 -114 33 -158 9z"/>
-                            <TextBlock Margin="5,0,0,5" Text="{Binding Path=FileInput, Converter={StaticResource ResourceKey=FilePathConverter}}"/>
+                            <TextBlock Margin="5,0,0,5" Text="{Binding Path=FileOutput, Converter={StaticResource ResourceKey=FilePathConverter}}"/>
                         </WrapPanel>
 
                     </StackPanel>
@@ -48,14 +48,11 @@
         <StackPanel Grid.Column="0" Grid.Row="0">
             <Label FontSize="12" Margin="5" Content="Введите длину слова:"/>
             <TextBox Name="wordLengthTextBox" Margin="5" Text="{Binding WorldLength}" PreviewTextInput="TextBox_TextInput" PreviewKeyDown="TextBox_KeyDown"/>
-            <RadioButton Margin="5" Name="radioButton" Content="Удалить знаки препинания"/>
+            <CheckBox Margin="5" Name="checkBox" Content="Удалить знаки препинания"/>
             <Button Margin="5" Content="Выберите выходные файлы" Grid.Column="1" Grid.Row="2" Command="{Binding AddOutputFile}"/>
             <Button Margin="5" Content="Выберите входные файлы" Grid.Column="0" Grid.Row="2" Command="{Binding AddInputFile}"/>
         </StackPanel>
-        <StackPanel Grid.Column="1" Grid.Row="0">
-
-        </StackPanel>
-        <Button Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" Margin="10" Content="Обработать текст" Command="{Binding CalculateCommand}" CommandParameter="{Binding ElementName=radioButton, Path=IsChecked}"/>
+        <Button Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" Margin="10" Content="Обработать текст" Command="{Binding CalculateCommand}" CommandParameter="{Binding ElementName=checkBox, Path=IsChecked}"/>
 
     </Grid>
 </Window>
