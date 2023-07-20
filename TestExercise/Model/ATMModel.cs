@@ -70,23 +70,19 @@ namespace TestExercise
             }
             if (small)
             {
-                var collection = _banknotes.Keys.OrderBy(x => x.Value).ToArray();
-                bool returnBeginning = false;
-                bool toEnd = false;
                 int currentSum = 0;
-                for (int i = 0; i < collection.Length; i++)
+                List<Banknote> collection = new List<Banknote>();
+                foreach(var b in _banknotes.Keys.OrderBy(x => x.Value).ToArray())
                 {
-                    var b = collection[i];
-                    if (i == collection.Length - 1)
-                    {
-                        toEnd = true;
-                    }
                     currentSum += b.Value * _banknotes[b];
-                    if (requestedAmount > currentSum && !toEnd)
+                    collection.Insert(0, b);
+                    if (requestedAmount <= currentSum)
                     {
-                        returnBeginning = true;
-                        continue;
+                        break;
                     }
+                }
+                foreach (var b in collection)
+                {
                     while (requestedAmount >= b.Value && _banknotes[b] > 0)
                     {
                         _banknotes[b]--;
@@ -101,13 +97,6 @@ namespace TestExercise
                             historyB.Count++;
                         }
                     }
-                    if (returnBeginning)
-                    {
-                        toEnd = true;
-                        returnBeginning = false;
-                        i = -1;
-                    }
-
                 }
             }
             else if (large)

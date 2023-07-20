@@ -20,15 +20,11 @@ namespace TestExercise
         {
             if(int.TryParse(sumBox.Text, out int result) && result % 10 == 0)
             {
-                HashSet<Banknotes> banknotes = _viewModel.ATMModel.AcceptMoney(ref result);
+                result = _viewModel.AcceptMoney(result);
                 if(result != 0)
                 {
                     MessageBox.Show($"Банкомат переполнен, возьмите оставшиеся деньги {result}", "", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
-                _viewModel.OnPropertyChanged(nameof(_viewModel.Balance));
-                _viewModel.OnPropertyChanged(nameof(_viewModel.Banknotes));
-                _viewModel.OnPropertyChanged(nameof(_viewModel.BalanceState));
-                _viewModel.HistoryMessages.Add(new HistoryMessage(Operations.Add, banknotes));
                 DialogResult = true;
             }
             else

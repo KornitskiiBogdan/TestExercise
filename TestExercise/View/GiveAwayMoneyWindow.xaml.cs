@@ -35,6 +35,11 @@ namespace TestExercise
 
         private void OK_Click(object sender, RoutedEventArgs e)
         {
+            if(smallRadioButton.IsChecked == largeRadioButton.IsChecked && largeRadioButton.IsChecked == false)
+            {
+                MessageBox.Show($"Выберите режим выдачи денег", "", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
             if (int.TryParse(sumBox.Text, out int result) && result % 10 == 0)
             {
                 if(result > _viewModel.Balance)
@@ -46,17 +51,14 @@ namespace TestExercise
                 HashSet<Banknotes> banknotes = new HashSet<Banknotes>();
                 if (smallRadioButton.IsChecked ?? false)
                 {
-                    banknotes = _viewModel.ATMModel.GiveAwayMoney(true, false, result);
+                    banknotes = _viewModel.GiveAwayMoney(true, false, result);
                 }
                 else if(largeRadioButton.IsChecked ?? false)
                 {
-                    banknotes = _viewModel.ATMModel.GiveAwayMoney(false, true, result);
+                    banknotes = _viewModel.GiveAwayMoney(false, true, result);
                 }
                 MessageBox.Show($"Банкомат выдал{banknotes.Sum(x => x.Value * x.Count)}", "Банкомат", MessageBoxButton.OK, MessageBoxImage.Information);
-                _viewModel.OnPropertyChanged(nameof(_viewModel.Balance));
-                _viewModel.OnPropertyChanged(nameof(_viewModel.Banknotes));
-                _viewModel.OnPropertyChanged(nameof(_viewModel.BalanceState));
-                _viewModel.HistoryMessages.Add(new HistoryMessage(Operations.Remove, banknotes));
+                
                 DialogResult = true;
 
             }

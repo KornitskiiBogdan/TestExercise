@@ -29,6 +29,24 @@ namespace TestExercise
         {
             get => _atmModel.GetBalance(false);
         }
+        public int AcceptMoney(int requestMoney)
+        {
+            HashSet<Banknotes> banknotes = ATMModel.AcceptMoney(ref requestMoney);
+            OnPropertyChanged(nameof(Balance));
+            OnPropertyChanged(nameof(Banknotes));
+            OnPropertyChanged(nameof(BalanceState));
+            HistoryMessages.Add(new HistoryMessage(Operations.Add, banknotes));
+            return requestMoney;
+        }
+        public HashSet<Banknotes> GiveAwayMoney(bool small, bool large, int requestMoney)
+        {
+            HashSet<Banknotes> banknotes = ATMModel.GiveAwayMoney(small, large, requestMoney);
+            OnPropertyChanged(nameof(Balance));
+            OnPropertyChanged(nameof(Banknotes));
+            OnPropertyChanged(nameof(BalanceState));
+            HistoryMessages.Add(new HistoryMessage(Operations.Remove, banknotes));
+            return banknotes;
+        }
         public EBalanceState BalanceState 
         { 
             get 
